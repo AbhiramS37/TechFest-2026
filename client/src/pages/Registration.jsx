@@ -1,4 +1,7 @@
+
 import { useState } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function Registration() {
     const [form, setForm] = useState({
@@ -22,7 +25,7 @@ function Registration() {
         setMessage("");
 
         try {
-            const response = await fetch("http://localhost:5000/api/register", {
+            const response = await fetch(`${API_URL}/api/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -34,10 +37,15 @@ function Registration() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Registration failed");
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Registration failed"
+                );
             }
 
             setMessage("Registration successful! You're registered.");
+
             setForm({
                 name: "",
                 email: "",
@@ -81,8 +89,12 @@ function Registration() {
                 />
 
                 <label>Department</label>
-                <select name="department" value={form.department}
-                    onChange={handleChange} required>
+                <select
+                    name="department"
+                    value={form.department}
+                    onChange={handleChange}
+                    required
+                >
                     <option value="">Select department</option>
                     <option value="CSE">Computer Science</option>
                     <option value="ECE">Electronics</option>
@@ -93,8 +105,12 @@ function Registration() {
                 </select>
 
                 <label>Academic Year</label>
-                <select name="year" value={form.year}
-                    onChange={handleChange} required>
+                <select
+                    name="year"
+                    value={form.year}
+                    onChange={handleChange}
+                    required
+                >
                     <option value="">Select year</option>
                     <option value="1">First Year</option>
                     <option value="2">Second Year</option>
@@ -103,8 +119,12 @@ function Registration() {
                 </select>
 
                 <label>Choose Event</label>
-                <select name="event" value={form.event}
-                    onChange={handleChange} required>
+                <select
+                    name="event"
+                    value={form.event}
+                    onChange={handleChange}
+                    required
+                >
                     <option value="">Select an event</option>
                     <option value="Coding Competition">Coding Competition</option>
                     <option value="Project Expo">Project Expo</option>
